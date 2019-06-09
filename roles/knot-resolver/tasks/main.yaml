@@ -1,0 +1,34 @@
+---
+- name: Add upstream knot-resolver repo signing key
+  apt_key:
+    data: "{{ lookup('file', 'Release.pub') }}"
+    state: present
+
+- name: Add upstream knot-resolver repository
+  apt_repository:
+    repo: >
+      deb http://download.opensuse.org/repositories/home:/CZ-NIC:/knot-resolver-latest/Debian_9.0/ /
+    state: present
+    update_cache: true
+
+- name: Install knot-resolver
+  package:
+    name: knot-resolver
+    state: present
+
+- name: Configure knot-resolver
+  template:
+    src: kresd.conf
+    dest: /etc/knot-resolver/kresd.conf
+
+- name: Configure kresd-tls.socket to listen on all interfaces
+  copy:
+    src: tls-all-interfaces.conf
+    dest: /etc/systemd/system/kresd-tls.socket.d/
+
+- name: Enable and start kresd instnaces
+  systemd:
+    name: kresd@{{ item }}
+    enabled: true
+    state: started
+  loop: "{{ range(1, kresd_instances + 1)|list }}"

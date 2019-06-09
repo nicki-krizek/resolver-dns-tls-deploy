@@ -1,0 +1,3 @@
+---
+kresd_instances: 2
+cache_size: 4 * GB

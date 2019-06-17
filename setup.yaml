@@ -1,3 +1,10 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: "install ansible deps"
+      raw: apt-get install python-minimal python-apt aptitude -y
+
 - hosts: all
   become: true
   vars:

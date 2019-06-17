@@ -1,0 +1,6 @@
+---
+- name: restart kresd
+  systemd:
+    name: kresd@{{ item }}
+    state: restarted
+  loop: "{{ range(1, kresd_instances + 1)|list }}"

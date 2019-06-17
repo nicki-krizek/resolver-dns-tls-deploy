@@ -20,6 +20,7 @@
   template:
     src: kresd.conf
     dest: /etc/knot-resolver/kresd.conf
+  notify: restart kresd
 
 - name: Configure kresd-tls.socket to listen on all interfaces
   copy:

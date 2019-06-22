@@ -4,11 +4,6 @@
     name: "{{ flamethrower_image }}:{{ flamethrower_version }}"
     source: pull
 
-- name: deploy flame@.service template
-  copy:
-    src: flame@.service
-    dest: /etc/systemd/system/flame@.service
-
 - name: create individual flames
   template:
     src: flame@.service
@@ -20,7 +15,11 @@
       max_qps: 50
 
 - name: start and enable flames
-  service:
+  systemd:
     name: "flame@{{ item }}.service"
     state: restarted
     enabled: true
+    daemon_reload: true
+  with_items:
+    - hot
+    - warm

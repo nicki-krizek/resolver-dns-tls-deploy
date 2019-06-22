@@ -14,6 +14,7 @@
     - hot
     - warm
     - umbrella
+    - flame
 
 - name: download cisco umbrella list
   get_url:
@@ -32,8 +33,9 @@
     tr -d $'\r' >{{ dnslists_dir }}/umbrella/domains
 
 - name: delete any existing umbrella lists
-  shell: "rm {{ dnslists_dir }}/{{ item }}/umbrella*"
-  warn: false
+  shell: "rm -f {{ dnslists_dir }}/{{ item }}/umbrella*"
+  args:
+    warn: false
   with_items:
     - hot
     - warm

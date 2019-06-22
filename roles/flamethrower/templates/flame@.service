@@ -1,2 +1,7 @@
+[Unit]
+Description=Resolver cache pre-warmer
+
 [Service]
-ExecStart=/usr/bin/docker run flamethrower -R -P tcptls -f {{ flamethrower_lists_dir }}/{{ item.temperature }} -Q {{ item.max_qps }} {{ flame_target }}
+Type=simple
+Restart=on-failure
+ExecStart=/usr/bin/docker run -v "{{ flamethrower_lists_dir }}/{{ item.temperature }}:/flamelist:ro" {{ flamethrower_image }}:{{ flamethrower_version }} -R -P tcptls -f /flamelist -Q {{ item.max_qps }} {{ flamethrower_target }}

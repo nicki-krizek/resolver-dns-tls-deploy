@@ -14,7 +14,7 @@
     - hot
     - warm
     - umbrella
-    - flame
+    - merged
 
 - name: download cisco umbrella list
   get_url:
@@ -58,7 +58,7 @@
   failed_when: false
 
 - name: create single list for flame
-  shell: "cat {{ dnslists_dir }}/{{ item }}/* >{{ dnslists_dir }}/flame/{{ item }}"
+  shell: "cat {{ dnslists_dir }}/{{ item }}/* >{{ dnslists_dir }}/merged/{{ item }}"
   with_items:
     - hot
     - warm

@@ -1,6 +1,0 @@
-[Unit]
-Description=Resolver cache pre-warmer
-
-[Service]
-Type=simple
-Restart=on-failure

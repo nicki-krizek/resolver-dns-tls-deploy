@@ -1,0 +1,52 @@
+---
+- name: install dependencies
+  package:
+    name:
+      - gawk
+      - unzip
+    state: present
+
+- name: make sure directories for lists exist
+  file:
+    path: "{{ dnslists_dir }}/{{ item }}"
+    state: directory
+  with_items:
+    - hot
+    - warm
+    - umbrella
+
+- name: download cisco umbrella list
+  get_url:
+    dest: "{{ dnslists_dir }}/top-1m.csv.zip"
+    url: http://s3-us-west-1.amazonaws.com/umbrella-static/top-1m.csv.zip
+
+- name: extract cisco umbrella list
+  unarchive:
+    dest: "{{ dnslists_dir}}/umbrella"
+    src: "{{ dnslists_dir }}/top-1m.csv.zip"
+    remote_src: true
+
+- name: create domain list from csv
+  shell: >
+    gawk -F ',' <{{ dnslists_dir }}/umbrella/top-1m.csv '{ print $2 }' |
+    tr -d $'\r' >{{ dnslists_dir }}/umbrella/domains
+
+- name: create query lists from domains
+  shell: >
+    /bin/bash -c "
+    sed 's/$/ {{ item.qtype }}/'
+    <(head -n {{ item.length }} {{ dnslists_dir }}/umbrella/domains)
+    >{{ dnslists_dir }}/{{ item.list }}/umbrella-top{{ item.length }}-{{ item.qtype }}"
+  with_items:
+    - qtype: A
+      list: hot
+      length: 10000
+    - qtype: AAAA
+      list: hot
+      length: 10000
+    - qtype: A
+      list: warm
+      length: 100000
+    - qtype: AAAA
+      list: warm
+      length: 100000

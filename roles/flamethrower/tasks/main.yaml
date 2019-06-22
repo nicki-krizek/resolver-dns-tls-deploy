@@ -1,0 +1,15 @@
+---
+- name: clone DNS-OARC/flamethrower
+  git:
+    dest: /var/opt/flamethrower
+    repo: https://github.com/DNS-OARC/flamethrower.git
+    version: "{{ flamethrower_version }}"
+
+- name: build docker container
+  docker_image:
+    build:
+      network: host
+      path: /var/opt/flamethrower/
+    state: present
+    source: build
+    name: "flamethrower:{{ flamethrower_version }}"

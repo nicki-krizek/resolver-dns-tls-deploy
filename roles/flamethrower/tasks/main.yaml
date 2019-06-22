@@ -1,15 +1,26 @@
 ---
-- name: clone DNS-OARC/flamethrower
-  git:
-    dest: /var/opt/flamethrower
-    repo: https://github.com/DNS-OARC/flamethrower.git
-    version: "{{ flamethrower_version }}"
-
-- name: build docker container
+- name: pull flamethrower docker image
   docker_image:
-    build:
-      network: host
-      path: /var/opt/flamethrower/
-    state: present
-    source: build
-    name: "flamethrower:{{ flamethrower_version }}"
+    name: "{{ flamethrower_image }}:{{ flamethrower_version }}"
+    source: pull
+
+- name: deploy flame@.service template
+  copy:
+    src: flame@.service
+    dest: /etc/systemd/system/flame@.service
+
+- name: create individual flames
+  template:
+    src: flame@.service
+    dest: /etc/systemd/system/flame@{{ item.temperature }}.service
+  with_items:
+    - temperature: hot
+      max_qps: 50
+    - temperature: warm
+      max_qps: 50
+
+- name: start and enable flames
+  service:
+    name: "flame@{{ item }}.service"
+    state: restarted
+    enabled: true

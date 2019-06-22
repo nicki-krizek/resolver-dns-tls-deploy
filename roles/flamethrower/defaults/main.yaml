@@ -1,2 +1,4 @@
 ---
+flamethrower_image: tomaskrizek/flamethrower
 flamethrower_version: 2dc140c
+flamethrower_lists_dir: /var/tmp/dnslists/flame

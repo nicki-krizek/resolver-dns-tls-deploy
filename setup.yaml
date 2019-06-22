@@ -5,10 +5,17 @@
     - name: "install ansible deps"
       raw: apt-get install python-minimal python-apt aptitude -y
 
-- hosts: all
+- hosts: resolver
   become: true
-  vars:
-    server_cert: /etc/letsencrypt/dns.dns-tls.com.pem
-    server_key: /etc/letsencrypt/dns.dns-tls.com.key
   roles:
-    - knot-resolver
+    - role: knot-resolver
+      vars:
+        server_cert: /etc/letsencrypt/dns.dns-tls.com.pem
+        server_key: /etc/letsencrypt/dns.dns-tls.com.key
+      tags:
+        - resolver
+    - role: flamethrower
+      vars:
+        flamethrower_target: localhost
+      tags:
+        - flamethrower

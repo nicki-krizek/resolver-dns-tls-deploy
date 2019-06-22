@@ -1,0 +1,35 @@
+---
+- name: install dependencies
+  package:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common
+    state: present
+
+- name: add upstream signing key
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+
+- name: add upstream repository
+  apt_repository:
+    repo: >
+      deb [arch=amd64] https://download.docker.com/linux/debian
+      {{ ansible_distribution_release }} stable
+    state: present
+
+- name: install docker
+  package:
+    name:
+      - docker-ce
+      - python-pip
+    state: present
+
+- name: install docker SDK from pip
+  pip:
+    name: docker
+    state: present

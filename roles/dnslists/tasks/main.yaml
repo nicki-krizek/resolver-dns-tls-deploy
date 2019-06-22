@@ -31,25 +31,20 @@
     gawk -F ',' <{{ dnslists_dir }}/umbrella/top-1m.csv '{ print $2 }' |
     tr -d $'\r' >{{ dnslists_dir }}/umbrella/domains
 
+- name: delete any existing umbrella lists
+  shell: "rm {{ dnslists_dir }}/{{ item }}/umbrella*"
+  warn: false
+  with_items:
+    - hot
+    - warm
+
 - name: create query lists from domains
   shell: >
     /bin/bash -c "
     sed 's/$/ {{ item.qtype }}/'
     <(head -n {{ item.length }} {{ dnslists_dir }}/umbrella/domains)
     >{{ dnslists_dir }}/{{ item.list }}/umbrella-top{{ item.length }}-{{ item.qtype }}"
-  with_items:
-    - qtype: A
-      list: hot
-      length: 10000
-    - qtype: AAAA
-      list: hot
-      length: 10000
-    - qtype: A
-      list: warm
-      length: 100000
-    - qtype: AAAA
-      list: warm
-      length: 100000
+  with_items: "{{ dnslists_umbrella }}"
 
 - name: deploy custom lists
   copy:

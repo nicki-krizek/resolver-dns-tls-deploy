@@ -1,2 +1,15 @@
 ---
 dnslists_dir: /var/tmp/dnslists
+dnslists_umbrella:
+  - qtype: A
+    list: hot
+    length: 10000
+  - qtype: AAAA
+    list: hot
+    length: 10000
+  - qtype: A
+    list: warm
+    length: 100000
+  - qtype: AAAA
+    list: warm
+    length: 100000

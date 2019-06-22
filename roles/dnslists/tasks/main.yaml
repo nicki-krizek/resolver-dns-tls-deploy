@@ -54,3 +54,9 @@
     - hot
     - warm
   failed_when: false
+
+- name: create single list for flame
+  shell: "cat {{ dnslists_dir }}/{{ item }}/* >{{ dnslists_dir }}/flame/{{ item }}"
+  with_items:
+    - hot
+    - warm

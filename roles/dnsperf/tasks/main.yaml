@@ -20,11 +20,7 @@
   template:
     src: dnsperf@.service
     dest: /etc/systemd/system/dnsperf@{{ item.temperature }}.service
-  with_items:
-    - temperature: hot
-      max_qps: 50
-    - temperature: warm
-      max_qps: 50
+  with_items: "{{ dnsperf_cache_warmers }}"
 
 - name: start and enable dnsperf
   systemd:

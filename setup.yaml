@@ -12,8 +12,28 @@
       vars:
         server_cert: /etc/letsencrypt/dns.dns-tls.com.pem
         server_key: /etc/letsencrypt/dns.dns-tls.com.key
+        cache_size: 10 * GB
       tags:
         - resolver
     - role: dnsperf
+      vars:
+        dnsperf_cache_warmers:
+          - temperature: hot
+            max_qps: 300
+          - temperature: warm
+            max_qps: 200
+        dnslists_umbrella:
+          - qtype: A
+            list: hot
+            length: 100000
+          - qtype: AAAA
+            list: hot
+            length: 100000
+          - qtype: A
+            list: warm
+            length: 1000000
+          - qtype: AAAA
+            list: warm
+            length: 1000000
       tags:
         - dnsperf

@@ -14,8 +14,6 @@
         server_key: /etc/letsencrypt/dns.dns-tls.com.key
       tags:
         - resolver
-    - role: flamethrower
-      vars:
-        flamethrower_target: localhost
+    - role: dnsperf
       tags:
-        - flamethrower
+        - dnsperf

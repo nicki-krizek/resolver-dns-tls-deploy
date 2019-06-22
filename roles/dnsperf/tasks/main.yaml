@@ -1,0 +1,38 @@
+---
+- name: add DNS-OARC signing key
+  apt_key:
+    url: https://pkg.dns-oarc.net/dns-oarc.distribution.key.gpg
+    state: present
+
+- name: add DNS-OARC repository
+  apt_repository:
+    repo: >
+      deb http://pkg.dns-oarc.net/debian {{ ansible_distribution_release }} main
+    state: present
+
+- name: install dnsperf
+  package:
+    name:
+      - dnsperf
+    state: present
+
+- name: create dnsperf services
+  template:
+    src: dnsperf@.service
+    dest: /etc/systemd/system/dnsperf@{{ item.temperature }}.service
+  with_items:
+    - temperature: hot
+      max_qps: 50
+    - temperature: warm
+      max_qps: 50
+
+- name: start and enable dnsperf
+  systemd:
+    name: "dnsperf@{{ item }}.service"
+    state: restarted
+    enabled: true
+    daemon_reload: true
+  with_items:
+    - hot
+    - warm
+

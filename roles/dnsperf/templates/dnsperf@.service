@@ -1,0 +1,7 @@
+[Unit]
+Description=Resolver cache pre-warmer
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStart=/bin/bash -c "shuf -r {{ dnsperf_lists_dir }}/{{ item.temperature }} | /usr/bin/dnsperf -c 10 -t 3 -Q {{ item.max_qps }}"

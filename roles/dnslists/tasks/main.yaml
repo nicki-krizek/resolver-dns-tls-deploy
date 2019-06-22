@@ -50,3 +50,12 @@
     - qtype: AAAA
       list: warm
       length: 100000
+
+- name: deploy custom lists
+  copy:
+    src: "{{ item }}"
+    dest: "{{ dnslists_dir }}/"
+  with_items:
+    - hot
+    - warm
+  failed_when: false

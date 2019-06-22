@@ -1,3 +1,5 @@
 .vagrant
 *.key
 *.csr
+roles/dnslists/files/hot/custom*
+roles/dnslists/files/warm/custom*

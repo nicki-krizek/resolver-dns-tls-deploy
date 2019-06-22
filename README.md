@@ -23,8 +23,9 @@ The server doesn't log your queries or IP address, only server-wide
 (such as total number of queries answered) are collected. You can check out
 [kresd.conf](./roles/knot-resolver/templates/kresd.conf) yourself.
 
-The following configuration snipper can be used to configure your local Knot
-Resolver to forwarding queries using TLS to dns.dns-tls.com:
+The following configuration snippet can be used to configure your local [Knot
+Resolver](https://www.knot-resolver.cz) to forward queries over TLS to
+dns.dns-tls.com:
 
 ```
 policy.add(policy.all(policy.TLS_FORWARD{{
@@ -52,7 +53,7 @@ Features
 - cache pre-warming with [Cisco
   Umbrella](http://s3-us-west-1.amazonaws.com/umbrella-static/index.html)
   domain popularity list for improved performance and privacy
-- uses latest upstream [Knot Resolver](https://gitlab.labs.nic.cz/knot/knot-resolver)
+- uses latest upstream [Knot Resolver](https://www.knot-resolver.cz)
 - Debian 9 compatible
 
 TODO
